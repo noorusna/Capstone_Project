@@ -4,10 +4,35 @@
 {% block content %}
 <h2 class="mb-4">Add New Project</h2>
 
-<form method="POST">
-    <div class="mb-3">
-        <label class="form-label">Image URL <span class="text-danger">*</span></label>
-        <input type="url" name="image" class="form-control" placeholder="https://..." required>
+<form method="POST" enctype="multipart/form-data">
+    <!-- IMAGE SECTION -->
+    <div class="mb-4 p-4 border rounded bg-light">
+        <label class="form-label fw-bold">Project Image <span class="text-danger">*</span></label>
+        
+        <div class="row g-3">
+            <!-- Option 1: Upload from computer -->
+            <div class="col-md-6">
+                <label class="form-label d-block text-center">
+                    <div class="border rounded p-4 bg-white text-center hover-bg-light" style="cursor: pointer;">
+                        <i class="bi bi-cloud-upload fs-1 text-primary"></i><br>
+                        <span>Click to upload from device</span>
+                    </div>
+                    <input type="file" name="image_file" accept="image/*" class="form-control mt-2" 
+                           onchange="this.closest('div').querySelector('.form-label').style.color='#198754'">
+                </label>
+            </div>
+
+            <!-- Option 2: External URL -->
+            <div class="col-md-6">
+                <label class="form-label">OR paste image URL</label>
+                <input type="url" name="image_url" class="form-control" 
+                       placeholder="https://i.imgur.com/example.jpg">
+                <small class="text-muted">Direct link to JPG/PNG/WEBP (Imgur, Cloudinary, etc.)</small>
+            </div>
+        </div>
+        <small class="text-muted d-block mt-2">
+            You must either upload a file OR provide a URL
+        </small>
     </div>
 
     <div class="mb-3">
@@ -22,17 +47,17 @@
 
     <div class="mb-3">
         <label class="form-label">GitHub URL (optional)</label>
-        <input type="url" name="github_url" class="form-control" placeholder="https://github.com/...">
+        <input type="url" name="github_url" class="form-control" placeholder="https://github.com/username/repo">
     </div>
 
-    <div class="mb-3">
+    <div class="mb-4">
         <label class="form-label">Description <span class="text-danger">*</span></label>
         <textarea name="description" class="form-control" rows="6" required></textarea>
     </div>
 
     <div>
-        <button type="submit" class="btn btn-success me-2">Add Project</button>
-        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-success btn-lg me-3">Add Project</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-lg">Cancel</a>
     </div>
 </form>
 {% endblock %}

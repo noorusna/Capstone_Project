@@ -1,15 +1,23 @@
-# app.py
-from flask import Flask, render_template, request, redirect, url_for, flash
+# app.py - UPDATED WITH IMAGE UPLOAD + URL SUPPORT
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 import json
 import os
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import uuid
 
 app = Flask(__name__)
-app.secret_key = 'super-secret-key'  # For flash messages
+app.secret_key = 'super-secret-key'  # Change in production!
 
 DATA_FILE = 'data.json'
 
-# Default data structure
+# Image upload config
+UPLOAD_FOLDER = 'static/project_images'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Default data
 DEFAULT_DATA = {
     "config": {
         "name": "Your Name",
@@ -19,6 +27,9 @@ DEFAULT_DATA = {
     },
     "projects": []
 }
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def load_data():
     if not os.path.exists(DATA_FILE):
@@ -30,14 +41,12 @@ def load_data():
         with open(DATA_FILE, 'r') as f:
             content = f.read().strip()
             if not content:
-                # File is empty
                 with open(DATA_FILE, 'w') as f2:
                     json.dump(DEFAULT_DATA, f2, indent=4)
                 return DEFAULT_DATA
             return json.loads(content)
     except json.JSONDecodeError:
-        # Corrupted JSON - reset to default
-        print("data.json was corrupted. Resetting to default.")
+        print("data.json corrupted. Resetting...")
         with open(DATA_FILE, 'w') as f:
             json.dump(DEFAULT_DATA, f, indent=4)
         return DEFAULT_DATA
@@ -60,7 +69,7 @@ def config():
         data['config']['course_description'] = request.form['course_description']
         data['config']['profile_info'] = request.form['profile_info']
         save_data(data)
-        flash('Configuration updated successfully!', 'success')
+        flash('Configuration updated!', 'success')
         return redirect(url_for('config'))
     return render_template('config.html', config=data['config'])
 
@@ -68,18 +77,39 @@ def config():
 def add_project():
     data = load_data()
     if request.method == 'POST':
+        image_path = None
+
+        # 1. Handle uploaded file
+        if 'image_file' in request.files and request.files['image_file'].filename != '':
+            file = request.files['image_file']
+            if file and allowed_file(file.filename):
+                ext = os.path.splitext(file.filename)[1]
+                filename = str(uuid.uuid4()) + ext
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                image_path = url_for('static', filename=f'project_images/{filename}')
+
+        # 2. If no upload, use URL
+        elif request.form.get('image_url'):
+            image_path = request.form['image_url']
+
+        # Must have at least one image source
+        if not image_path:
+            flash('You must upload an image or provide a URL!', 'danger')
+            return redirect(request.url)
+
         project = {
             "id": int(datetime.now().timestamp() * 1000),
-            "image": request.form['image'],
+            "image": image_path,
             "title": request.form['title'],
-            "website_url": request.form['website_url'],
-            "github_url": request.form['github_url'],
+            "website_url": request.form.get('website_url', ''),
+            "github_url": request.form.get('github_url', ''),
             "description": request.form['description']
         }
         data['projects'].append(project)
         save_data(data)
         flash('Project added successfully!', 'success')
         return redirect(url_for('index'))
+
     return render_template('add_project.html')
 
 @app.route('/project/<int:project_id>')
@@ -100,13 +130,30 @@ def edit_project(project_id):
         return redirect(url_for('index'))
 
     if request.method == 'POST':
-        project['image'] = request.form['image']
-        project['title'] = request.form['title']
-        project['website_url'] = request.form['website_url']
-        project['github_url'] = request.form['github_url']
-        project['description'] = request.form['description']
+        image_path = project['image']  # keep current by default
+
+        # New upload replaces old
+        if 'image_file' in request.files and request.files['image_file'].filename != '':
+            file = request.files['image_file']
+            if file and allowed_file(file.filename):
+                ext = os.path.splitext(file.filename)[1]
+                filename = str(uuid.uuid4()) + ext
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                image_path = url_for('static', filename=f'project_images/{filename}')
+
+        # New URL replaces old
+        elif request.form.get('image_url'):
+            image_path = request.form['image_url']
+
+        project.update({
+            'image': image_path,
+            'title': request.form['title'],
+            'website_url': request.form.get('website_url', ''),
+            'github_url': request.form.get('github_url', ''),
+            'description': request.form['description']
+        })
         save_data(data)
-        flash('Project updated successfully!', 'success')
+        flash('Project updated!', 'success')
         return redirect(url_for('index'))
 
     return render_template('edit_project.html', project=project)
@@ -116,7 +163,7 @@ def delete_project(project_id):
     data = load_data()
     data['projects'] = [p for p in data['projects'] if p['id'] != project_id]
     save_data(data)
-    flash('Project deleted successfully!', 'success')
+    flash('Project deleted!', 'success')
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

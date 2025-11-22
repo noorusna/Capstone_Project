@@ -13,6 +13,22 @@
             "website_url": "https://j28gym.com",
             "github_url": "https://github.com/mcjohal/Workout_App.git",
             "description": "This application allows the user plan future workouts. The workout planning application provides the following functionality:\n1. Login using YouTube account\n2. Add exercises including title, image links, video links, and description.\n3. Allows the user to select a calendar date and exercises, including reps, sets and max-weight for that date.\n4. Provide a list of upcoming planned workout instances.\n5. Provides functionality to flag each planned exercise as completed. \n6. Display the number of completed workouts on the dashboard for that user.  \n    \n    \n    "
+        },
+        {
+            "id": 1763790422260,
+            "image": "/static/project_images/8721fa40-0155-428b-8010-bf8e1c65e996.png",
+            "title": "API Playground",
+            "website_url": "https://useful-app.onrender.com/",
+            "github_url": "",
+            "description": "This application implements 3 free APIs\n1. Advice Slip API - The Advice Slip JSON API is provided for free. \ud83d\ude0e It currently gives out over 10 million pieces of advice every year.\n2. Giphy API - By integrating with GIPHY, the first and largest GIF search engine, you gain access to our ever-growing content library of GIFs and Stickers.\n3. BoredAPI - Find random activities to fight boredom\n    "
+        },
+        {
+            "id": 1763796314866,
+            "image": "/static/project_images/5b2ed29e-7424-45f9-abb3-361d67fc126d.png",
+            "title": "Jeep Social Media",
+            "website_url": "https://social-network-kppg.onrender.com/users",
+            "github_url": "https://github.com/mcjohal/Social_Network.git",
+            "description": "This is a Social Media app for Jeep offroad enthusiasts.\n1. This app implements the JSONPlaceholder API - A reliable API for testing and prototyping. JSONPlaceholder is a free online REST API that can be used whenever fake data is needed.  This includes posts, comments, albums, photos, todos, and user.\n2. The Jeep Social Media app includes functionality to add a post, view a feed, view member profiles, and view comments.\n\n    "
         }
     ]
 }

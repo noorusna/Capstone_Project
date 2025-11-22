@@ -2,36 +2,75 @@
 {% block title %}Home - My Portfolio{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h1 class="display-4">Welcome to My Portfolio</h1>
-    <h3>{{ config.name }}</h3>
-    <p class="lead"><strong>{{ config.course_number }}</strong> - {{ config.course_description }}</p>
-    <p>{{ config.profile_info }}</p>
+
+<div class="jumbotron bg-dark text-white p-5 rounded mb-3">
+    <h1 class="display-4">Capstone Project</h1>
+    <h3 class="mb-3">{{ config.name }}</h3>
+    <p class="lead mb-2">
+        <strong>{{ config.course_number }}</strong> - {{ config.course_description }}
+    </p>
+    <hr class="my-2 bg-light">
+    <p class="mb-0">{{ config.profile_info }}</p>
 </div>
 
-<div class="row">
+<div class="row row-cols-1 row-cols-md-3 mb-4 g-4">
     {% for project in projects %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
+    <div class="col">
+        <div class="card h-100 shadow-sm hover-shadow transition">
             <a href="{{ url_for('project_detail', project_id=project.id) }}">
-                <img src="{{ project.image }}" class="card-img-top" alt="{{ project.title }}" style="height: 200px; object-fit: cover;">
+                <img src="{{ project.image }}" 
+                     class="card-img-top" 
+                     alt="{{ project.title }}" 
+                     style="height: 220px; object-fit: cover;">
             </a>
+
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title">
-                    <a href="{{ url_for('project_detail', project_id=project.id) }}" class="text-decoration-none">{{ project.title }}</a>
+                <h5 class="card-title mb-3">
+                    <a href="{{ url_for('project_detail', project_id=project.id) }}" 
+                       class="text-decoration-none text-dark fw-bold">
+                        {{ project.title }}
+                    </a>
                 </h5>
-                <div class="mt-auto text-center">
-                    <a href="{{ url_for('edit_project', project_id=project.id) }}" class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-pencil"></i> Edit
+
+                <p class="card-text text-muted  flex-grow-1">
+                    {{ project.description | striptags | truncate(160) }}
+                </p>
+
+                <div class="mt-auto d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('project_detail', project_id=project.id) }}" 
+                       class="btn btn-sm btn-outline-success">
+                        View Project →
+                    </a>
+                    <a href="{{ url_for('edit_project', project_id=project.id) }}" 
+                       class="btn btn-sm btn-outline-primary" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
                     </a>
                 </div>
             </div>
         </div>
     </div>
     {% else %}
-    <div class="col-12 text-center">
-        <p>No projects yet. <a href="{{ url_for('add_project') }}">Add your first project!</a></p>
+    <div class="col-12 text-center py-5">
+        <div class="alert alert-info d-inline-block">
+            <p class="mb-2">No projects yet.</p>
+            <a href="{{ url_for('add_project') }}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Add Your First Project
+            </a>
+        </div>
     </div>
     {% endfor %}
 </div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.15) !important;
+    }
+</style>
 {% endblock %}

@@ -6,7 +6,7 @@
 
 <form method="POST" enctype="multipart/form-data">
     <!-- IMAGE SECTION - SAME AS ADD PAGE -->
-    <div class="mb-4 p-4 border rounded bg-light">
+    <div class="mb-4 p-4 border rounded bg-dark">
         <label class="form-label fw-bold">Project Image <span class="text-danger">*</span></label>
 
         <!-- Show current image preview -->
@@ -21,7 +21,7 @@
             <!-- Option 1: Upload new image (replaces current) -->
             <div class="col-md-6">
                 <label class="form-label d-block text-center">
-                    <div class="border rounded p-4 bg-white text-center hover-bg-light" style="cursor: pointer;">
+                    <div class="border rounded p-4 bg-light text-center hover-bg-light" style="cursor: pointer;">
                         <i class="bi bi-cloud-upload fs-1 text-primary"></i><br>
                         <span>Upload new image</span>
                     </div>
@@ -59,8 +59,10 @@
     </div>
 
     <div class="mb-4">
-        <label class="form-label">Description <span class="text-danger">*</span></label>
-        <textarea name="description" class="form-control" rows="6" required>{{ project.description }}</textarea>
+    <label class="form-label fw-bold">Description <span class="text-danger">*</span></label>
+    <textarea name="description" id="description-editor" class="form-control" rows="10" required>
+        {% if project %}{{ project.description }}{% endif %}
+    </textarea>
     </div>
 
     <div>

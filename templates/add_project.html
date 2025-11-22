@@ -51,8 +51,10 @@
     </div>
 
     <div class="mb-4">
-        <label class="form-label">Description <span class="text-danger">*</span></label>
-        <textarea name="description" class="form-control" rows="6" required></textarea>
+    <label class="form-label fw-bold">Description <span class="text-danger">*</span></label>
+    <textarea name="description" id="description-editor" class="form-control" rows="10" required>
+        {% if project %}{{ project.description }}{% endif %}
+    </textarea>
     </div>
 
     <div>

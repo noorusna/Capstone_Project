@@ -1,13 +1,14 @@
-# app.py - UPDATED WITH IMAGE UPLOAD + URL SUPPORT
+# app.py - FULLY UPDATED WITH WYSIWYG (TinyMCE) + SAFE HTML SAVING
 from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 import json
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
+import nh3
 
 app = Flask(__name__)
-app.secret_key = 'super-secret-key'  # Change in production!
+app.secret_key = 'super-secret-key'  # CHANGE THIS IN PRODUCTION!
 
 DATA_FILE = 'data.json'
 
@@ -55,6 +56,38 @@ def save_data(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=4)
 
+# ------------------------------------------------------------------
+# BLEACH CLEANER FUNCTION - Makes TinyMCE HTML safe to display with |safe
+# ------------------------------------------------------------------
+# 1. Use Curly Braces {} for tags (Set)
+allowed_tags = {
+    'p', 'b', 'i', 'u', 'em', 'strong', 'a', 
+    'ul', 'ol', 'li', 'br', 'h1', 'h2', 'h3', 
+    'blockquote', 'code', 'pre', 'div', 'span'
+}
+
+# 2. Use Curly Braces {} for attribute values (Set)
+allowed_attributes = {
+    '*': {'class', 'style'},          # <--- Change [] to {}
+    'a': {'href', 'title', 'target'}, # <--- Change [] to {}
+    'img': {'src', 'alt', 'width', 'height'}
+}
+
+# Note: nh3 does not use 'allowed_styles' in the same way, so you can ignore/remove that list.
+
+# ... inside your function ...
+def clean_description(html):
+    return nh3.clean(
+        html,
+        tags=allowed_tags,
+        attributes=allowed_attributes,
+        strip_comments=False
+    )
+
+# ------------------------------------------------------------------
+# ROUTES
+# ------------------------------------------------------------------
+
 @app.route('/')
 def index():
     data = load_data()
@@ -92,10 +125,13 @@ def add_project():
         elif request.form.get('image_url'):
             image_path = request.form['image_url']
 
-        # Must have at least one image source
         if not image_path:
             flash('You must upload an image or provide a URL!', 'danger')
             return redirect(request.url)
+
+        # CLEAN THE DESCRIPTION BEFORE SAVING
+        raw_description = request.form['description']
+        safe_description = clean_description(raw_description)
 
         project = {
             "id": int(datetime.now().timestamp() * 1000),
@@ -103,7 +139,7 @@ def add_project():
             "title": request.form['title'],
             "website_url": request.form.get('website_url', ''),
             "github_url": request.form.get('github_url', ''),
-            "description": request.form['description']
+            "description": safe_description  # ← SAFE HTML NOW
         }
         data['projects'].append(project)
         save_data(data)
@@ -145,12 +181,16 @@ def edit_project(project_id):
         elif request.form.get('image_url'):
             image_path = request.form['image_url']
 
+        # CLEAN DESCRIPTION ON EDIT TOO
+        raw_description = request.form['description']
+        safe_description = clean_description(raw_description)
+
         project.update({
             'image': image_path,
             'title': request.form['title'],
             'website_url': request.form.get('website_url', ''),
             'github_url': request.form.get('github_url', ''),
-            'description': request.form['description']
+            'description': safe_description  # ← SAFE HTML
         })
         save_data(data)
         flash('Project updated!', 'success')

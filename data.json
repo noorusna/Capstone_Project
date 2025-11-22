@@ -3,16 +3,16 @@
         "name": "Maricruz Johal",
         "course_number": "CIS 2020",
         "course_description": "Introduction to Python Programming",
-        "profile_info": "I'm a passionate developer learning Flask and building portfolios."
+        "profile_info": "After 27 years in the industry writing C#, JavaScript, and Python, I\u2019ve debugged enough late night code to know exactly where students get stuck. I\u2019m here to fast track your learning with practical, real-world examples. My goal is to help you move from frustration to functionality. Let's get to work."
     },
     "projects": [
         {
             "id": 1763669463572,
-            "image": "/static/project_images/297e5f08-337a-4b35-a899-2481b33e4b58.png",
+            "image": "/static/project_images/2cc90811-3a19-4fc0-b863-f9835f44f809.png",
             "title": "The Gym Planning App",
             "website_url": "https://j28gym.com",
             "github_url": "https://github.com/mcjohal/Workout_App.git",
-            "description": "This application allows the user plan future workouts. The workout planning application provides the following functionality:\r\n1. Login using YouTube account\r\n2. Add exercises including title, image links, video links, and description.\r\n3. Allows the user to select a calendar date and exercises, including reps, sets and max-weight for that date.\r\n4. Provide a list of upcoming planned workout instances.\r\n5. Provides functionality to flag each planned exercise as completed. \r\n6. Display the number of completed workouts on the dashboard for that user."
+            "description": "This application allows the user plan future workouts. The workout planning application provides the following functionality:\n1. Login using YouTube account\n2. Add exercises including title, image links, video links, and description.\n3. Allows the user to select a calendar date and exercises, including reps, sets and max-weight for that date.\n4. Provide a list of upcoming planned workout instances.\n5. Provides functionality to flag each planned exercise as completed. \n6. Display the number of completed workouts on the dashboard for that user.  \n    \n    \n    "
         }
     ]
 }

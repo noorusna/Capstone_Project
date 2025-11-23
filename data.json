@@ -1,0 +1,10 @@
+{
+    "config": {
+        "name": "Britt Rios-Ellis",
+        "course_number": "CS101",
+        "course_description": "Introduction to Web Development",
+        "profile_info": "I'm a passionate developer learning Python, Flask, and building portfolios.",
+        "linkedin": "https://www.linkedin.com/in/britt-rios-ellis-58597119/"
+    },
+    "projects": []
+}

@@ -146,11 +146,12 @@ def config():
             'name': request.form['name'].strip(),
             'course_number': request.form['course_number'].strip(),
             'course_description': request.form['course_description'].strip(),
-            'profile_info': request.form['profile_info'].strip()
+            'profile_info': request.form['profile_info'].strip(),
+            'linkedin':request.form['linkedin'].strip()
         })
         save_data(data)
         flash('Configuration updated!', 'success')
-        return redirect(url_for('config'))
+        return redirect(url_for('index'))
     return render_template('config.html', config=data['config'])
 
 # --------------------- ADD PROJECT (single route) ---------------------

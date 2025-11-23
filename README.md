@@ -24,3 +24,8 @@ In your .env file you put exactly this (no quotes, no extra spaces, no colon at 
 PASSWORD_HASH=pbkdf2:sha256:1000000$a6UYcfFz8bK9mN1pQ2rS3tU4vW5xY6zA$a1b2c3d4e5f6g7h8i9j0kLmNoPqRsTuVwXyZ
 
 That exact plain-text password you put inside the quotes is the one you must type when the login page asks for the password.
+
+Update Portfolio
+1. Remove the data.json file and add your projects once the app is deployed.
+2. Or add the data.json file to the .gitignore file so that it is not included in your repository.
+   Otherwise it will overwrite any data changes made on the deployed version.

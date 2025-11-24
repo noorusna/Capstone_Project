@@ -1,35 +1,11 @@
 {
     "config": {
-        "name": "Maricruz Johal",
-        "course_number": "CIS 2020 & CIS 3020",
-        "course_description": "Introduction and Advanced Python Programming",
-        "profile_info": "After 27 years in the industry writing C#, JavaScript, and Python, I\u2019ve debugged enough late night code to know exactly where students get stuck. I\u2019m here to fast-track your learning with practical, real-world examples. My goal is to help you move from frustration to functionality. Let's get to work.",
-        "linkedin": "https://www.linkedin.com/in/maricruz-johal/"
+        "name": "Student Name",
+        "course_number": "CIS Python Programming",
+        "course_description": "Describe the Course",
+        "profile_info": "Tell us something about yourself.",
+        "linkedin": "https://www.linkedin.com/in/britt-rios-ellis-58597119/",
+        "theme": "quartz"
     },
-    "projects": [
-        {
-            "id": 1763886255099,
-            "image": "/static/project_images/2b91769a-549f-4c17-bc63-e9886f525168.png",
-            "title": "Jeep Offroad Social Media App",
-            "website_url": "https://social-network-kppg.onrender.com",
-            "github_url": "https://github.com/mcjohal/Social_Network.git",
-            "description": "This is a Jeep Social Media Network Application. It have various functionality.\n1. Allows user to add comments\n2. Provides a page to view a social media feed.\n3. Keeps track of members.\n4. Allows members to create posts.\n\nThe index.html page is the dashboard. This application implement the JSONPlaceholder API.\nJSONPlaceholder is a free online REST API that you can use whenever you need some fake data. \nJSONPlaceholder comes with a set of 6 common resources including posts, comments, albums, photos, todos, and users."
-        },
-        {
-            "id": 1763886356206,
-            "image": "/static/project_images/cef01dfd-cb90-46ab-ab9d-08185c46d2fa.png",
-            "title": "API Playground / Useful App",
-            "website_url": "https://useful-app.onrender.com",
-            "github_url": "https://github.com/mcjohal/Useful_App.git",
-            "description": "This is a Flask application that implements 3 different free APIs. \n1. Advice Slip API -The Advice Slip JSON API is provided for free. \ud83d\ude0e It currently gives out over 10 million pieces of advice every year. Returns a random advice slip as a slip object.\n2. Giphy API - By integrating with GIPHY, the first and largest GIF search engine, you gain access to our ever-growing content library of GIFs and Stickers \u2014 featuring the latest in entertainment, sports, and breaking news from GIPHY's official content partners.\n3. BoredAPI - The Bored API helps you find things to do when you're bored! There are fields like the number of participants, activity type, and more that help you narrow down your results.\n\nThe application includes the Bootstrap CDN https://bootswatch.com/morph/ theme."
-        },
-        {
-            "id": 1763886435626,
-            "image": "/static/project_images/746b53db-b0d6-4ff8-a21d-1d5a1452ce85.png",
-            "title": "Workout Planner",
-            "website_url": "https://j28gym.com",
-            "github_url": "https://github.com/mcjohal/Workout_App.git",
-            "description": "This application allows the user plan future workouts. The workout planning application provides the following functionality:\n1. Login using YouTube account\n2. Add exercises including title, image links, video links, and description.\n3. Allows the user to select a calendar date and exercises, including reps, sets and max-weight for that date.\n4. Provide a list of upcoming planned workout instances.\n5. Provides functionality to flag each planned exercise as completed. \n6. Display the number of completed workouts on the dashboard for that user.  \n7. This app is a work in progress.\n"
-        }
-    ]
+    "projects": []
 }

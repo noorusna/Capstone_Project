@@ -13,6 +13,7 @@ import uuid
 import nh3
 import re
 from html import unescape
+from flask import g
 
 # Load .env
 load_dotenv()
@@ -32,10 +33,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # ------------------------------------------------------------------
 DEFAULT_DATA = {
     "config": {
-        "name": "Your Name",
-        "course_number": "CS101",
-        "course_description": "Introduction to Web Development",
-        "profile_info": "I'm a passionate developer learning Flask and building portfolios."
+        "name": "Student Name",
+        "course_number": "CIS Python Programming",
+        "course_description": "Describe the Course",
+        "profile_info": "Tell us something about yourself.",
+        "linkedin": "https://www.linkedin.com/in/britt-rios-ellis-58597119/",
+        "theme": "quartz"
     },
     "projects": []
 }
@@ -59,6 +62,22 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=4)
+
+# ------------------------------------------------------------------
+# Context Processor (now uses data.json for global config injection)
+# ------------------------------------------------------------------
+@app.context_processor
+def inject_config():
+    data = load_data()
+    config = data['config'].copy()  # Avoid mutating the loaded data
+    # Ensure defaults (fallback if DEFAULT_DATA changes)
+    config.setdefault('theme', 'quartz')
+    config.setdefault('name', 'Student Name')
+    config.setdefault('course_number', 'CIS Python Programming')
+    config.setdefault('course_description', 'Tell us something about yourself.')
+    config.setdefault('profile_info', '')
+    config.setdefault('linkedin', 'https://www.linkedin.com/in/britt-rios-ellis-58597119/')
+    return dict(config=config)
 
 # ------------------------------------------------------------------
 # Sanitization + text length
@@ -102,7 +121,7 @@ def password_required(f):
 @app.route('/')
 def index():
     data = load_data()
-    return render_template('index.html', config=data['config'], projects=data['projects'])
+    return render_template('index.html', projects=data['projects'])  # config now from context processor
 
 @app.route('/project/<int:project_id>')
 def project_detail(project_id):
@@ -111,7 +130,7 @@ def project_detail(project_id):
     if not project:
         flash('Project not found!', 'danger')
         return redirect(url_for('index'))
-    return render_template('project_detail.html', project=project)
+    return render_template('project_detail.html', project=project)  # config from processor
 
 # --------------------- LOGIN ---------------------
 @app.route('/login', methods=['GET', 'POST'])
@@ -128,7 +147,7 @@ def login():
             return redirect(next_page or url_for('index'))
         else:
             flash('Incorrect password.', 'danger')
-    return render_template('login.html')
+    return render_template('login.html')  # config from processor (if needed)
 
 @app.route('/logout')
 def logout():
@@ -147,12 +166,13 @@ def config():
             'course_number': request.form['course_number'].strip(),
             'course_description': request.form['course_description'].strip(),
             'profile_info': request.form['profile_info'].strip(),
-            'linkedin':request.form['linkedin'].strip()
+            'linkedin': request.form['linkedin'].strip(),
+            'theme': request.form['theme'].strip()
         })
         save_data(data)
         flash('Configuration updated!', 'success')
         return redirect(url_for('index'))
-    return render_template('config.html', config=data['config'])
+    return render_template('config.html')  # config from processor (pre-fills form)
 
 # --------------------- ADD PROJECT (single route) ---------------------
 @app.route('/project/add', methods=['GET', 'POST'])
@@ -208,7 +228,7 @@ def add_project():
 
         return redirect(request.url)
 
-    return render_template('add_project.html')
+    return render_template('add_project.html')  # config from processor
 
 # --------------------- EDIT PROJECT ---------------------
 @app.route('/project/edit/<int:project_id>', methods=['GET', 'POST'])
@@ -260,7 +280,7 @@ def edit_project(project_id):
 
         return redirect(request.url)
 
-    return render_template('edit_project.html', project=project)
+    return render_template('edit_project.html', project=project)  # config from processor
 
 # --------------------- DELETE PROJECT ---------------------
 @app.route('/project/delete/<int:project_id>', methods=['POST'])

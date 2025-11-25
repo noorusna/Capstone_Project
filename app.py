@@ -226,6 +226,8 @@ def add_project():
         website_url = request.form.get('website_url', '').strip()
         github_url = request.form.get('github_url', '').strip()
         raw_description = request.form.get('description') or ''
+        # Convert newlines to <br> for line breaks
+        raw_description = raw_description.replace('\n', '<br>\n')
         safe_description = clean_description(raw_description)
 
         # Validation
@@ -281,6 +283,8 @@ def edit_project(project_id):
         website_url = request.form.get('website_url', '').strip()
         github_url = request.form.get('github_url', '').strip()
         raw_description = request.form.get('description') or ''
+        # Convert newlines to <br> for line breaks
+        raw_description = raw_description.replace('\n', '<br>\n')
         safe_description = clean_description(raw_description)
 
         if not title:

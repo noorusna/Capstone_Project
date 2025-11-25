@@ -226,8 +226,8 @@ def add_project():
         website_url = request.form.get('website_url', '').strip()
         github_url = request.form.get('github_url', '').strip()
         raw_description = request.form.get('description') or ''
-        # Convert newlines to <br> for line breaks
-        raw_description = raw_description.replace('\n', '<br>\n')
+        # Convert newlines to <br> for line breaks (no trailing \n to avoid accumulation)
+        raw_description = raw_description.replace('\n', '<br>')
         safe_description = clean_description(raw_description)
 
         # Validation
@@ -283,8 +283,8 @@ def edit_project(project_id):
         website_url = request.form.get('website_url', '').strip()
         github_url = request.form.get('github_url', '').strip()
         raw_description = request.form.get('description') or ''
-        # Convert newlines to <br> for line breaks
-        raw_description = raw_description.replace('\n', '<br>\n')
+        # Convert newlines to <br> for line breaks (no trailing \n to avoid accumulation)
+        raw_description = raw_description.replace('\n', '<br>')
         safe_description = clean_description(raw_description)
 
         if not title:
@@ -309,7 +309,13 @@ def edit_project(project_id):
 
         return redirect(request.url)
 
-    return render_template('edit_project.html', project=project)  # config from processor
+    # For GET: Prepare editable description (convert <br> back to \n, handling legacy <br>\n)
+    plain_description = project['description']
+    # Handle legacy format by removing \n after <br>
+    plain_description = plain_description.replace('<br>\n', '<br>')
+    # Now convert all <br> variants to \n
+    plain_description = re.sub(r'<br\s*/?\s*>', '\n', plain_description, flags=re.IGNORECASE)
+    return render_template('edit_project.html', project=project, plain_description=plain_description)  # config from processor
 
 # --------------------- DELETE PROJECT ---------------------
 @app.route('/project/delete/<int:project_id>', methods=['POST'])

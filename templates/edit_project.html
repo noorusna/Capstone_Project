@@ -61,7 +61,7 @@
             <label class="form-label fw-bold">Description <span class="text-danger">*</span></label>
             
             <textarea name="description" id="description-editor" class="form-control" rows="12">
-                {{ project.description | safe }}
+                {{ plain_description or project.description }}
             </textarea>
 
             <div class="mt-2">

@@ -38,7 +38,8 @@ DEFAULT_DATA = {
         "course_description": "Describe the Course",
         "profile_info": "Tell us something about yourself.",
         "linkedin": "https://www.linkedin.com/in/britt-rios-ellis-58597119/",
-        "theme": "quartz"
+        "theme": "quartz",
+        "profile_image": ""
     },
     "projects": []
 }
@@ -77,6 +78,7 @@ def inject_config():
     config.setdefault('course_description', 'Tell us something about yourself.')
     config.setdefault('profile_info', '')
     config.setdefault('linkedin', 'https://www.linkedin.com/in/britt-rios-ellis-58597119/')
+    config.setdefault('profile_image', '')
     return dict(config=config)
 
 # ------------------------------------------------------------------
@@ -161,14 +163,37 @@ def logout():
 def config():
     data = load_data()
     if request.method == 'POST':
+        # Handle profile image (keep existing if no new provided)
+        current_image = data['config'].get('profile_image', '')
+        new_image_path = None
+        if 'image_file' in request.files and request.files['image_file'].filename:
+            file = request.files['image_file']
+            if file and allowed_file(file.filename):
+                ext = os.path.splitext(file.filename)[1]
+                filename = f"{uuid.uuid4()}{ext}"
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                new_image_path = url_for('static', filename=f'project_images/{filename}')
+        elif request.form.get('profile_image_url'):
+            new_image_path = request.form.get('profile_image_url').strip()
+
+        image_path = new_image_path if new_image_path is not None else current_image
+
+        # Other fields
         data['config'].update({
             'name': request.form['name'].strip(),
             'course_number': request.form['course_number'].strip(),
             'course_description': request.form['course_description'].strip(),
             'profile_info': request.form['profile_info'].strip(),
             'linkedin': request.form['linkedin'].strip(),
-            'theme': request.form['theme'].strip()
+            'theme': request.form['theme'].strip(),
+            'profile_image': image_path
         })
+
+        # Validation for profile image
+        if not image_path:
+            flash('Profile image is required!', 'danger')
+            return redirect(request.url)
+
         save_data(data)
         flash('Configuration updated!', 'success')
         return redirect(url_for('index'))

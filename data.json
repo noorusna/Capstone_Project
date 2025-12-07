@@ -1,0 +1,12 @@
+{
+    "config": {
+        "name": "Student Name",
+        "course_number": "CIS Python Programming",
+        "course_description": "Describe the Course",
+        "profile_info": "Tell us something about yourself.",
+        "linkedin": "https://www.linkedin.com/in/britt-rios-ellis-58597119/",
+        "theme": "quartz",
+        "profile_image": ""
+    },
+    "projects": []
+}
